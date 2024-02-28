@@ -9,6 +9,7 @@ import {
   Income,
 } from './definitions';
 import { formatCurrency } from './utils';
+import { unstable_noStore as noStore } from 'next/cache';
 
 /**
  * Fetches income data from the database.
@@ -17,6 +18,7 @@ import { formatCurrency } from './utils';
 export async function fetchIncome() {
   // Add noStore() here prevent the response from being cached.
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
+  noStore();
 
   try {
     const data = await sql<Income>`SELECT * FROM income`;
@@ -33,6 +35,7 @@ export async function fetchIncome() {
  * @returns {Promise<LatestInvoiceRaw[]>} A promise that resolves to an array of the latest invoices.
  */
 export async function fetchLatestInvoices() {
+  noStore();
   try {
     const data = await sql<LatestInvoiceRaw>`
       SELECT invoices.amount, sellers.name, sellers.image_url, sellers.email, invoices.id
@@ -57,6 +60,7 @@ export async function fetchLatestInvoices() {
  * @returns {Promise<object>} A promise that resolves to an object containing card data.
  */
 export async function fetchCardData() {
+  noStore();
   try {
     const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const sellerCountPromise = sql`SELECT COUNT(*) FROM sellers`;
@@ -103,6 +107,7 @@ export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
 ) {
+  noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
@@ -140,6 +145,7 @@ export async function fetchFilteredInvoices(
  * @returns {Promise<number>} A promise that resolves to the total number of pages.
  */
 export async function fetchInvoicesPages(query: string) {
+  noStore();
   try {
     const count = await sql`SELECT COUNT(*)
     FROM invoices
