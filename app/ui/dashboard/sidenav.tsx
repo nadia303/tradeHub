@@ -2,6 +2,7 @@ import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import TradeHubLogo from '@/app/ui/tradehub-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
+import { signOut } from '@/auth';
 
 export default function SideNav() {
   return (
@@ -15,6 +16,12 @@ export default function SideNav() {
         </div>
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+        <form
+          action={async () => {
+            'use server';
+            await signOut();
+          }}
+        ></form>
         <NavLinks />
         <div className="bg-ne hidden h-auto w-full grow rounded-md  bg-neutral-900 md:block"></div>
         <form>
